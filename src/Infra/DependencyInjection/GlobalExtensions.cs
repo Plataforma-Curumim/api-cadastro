@@ -4,6 +4,8 @@
     {
         public static void AddGlobalExtensions(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSwaggerGen();
+            services.AddEndpointsApiExplorer();
             services.AddUseCaseExtensions();
             services.AddRepositoryExtension();
         }

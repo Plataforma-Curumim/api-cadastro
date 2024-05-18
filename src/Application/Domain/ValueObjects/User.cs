@@ -9,7 +9,7 @@ namespace api_cadastro.Application.Domain.ValueObjects
         public string? Email { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string? NumberPhone { get; set; }
         public string? Address { get; set; }
         public string? IdRfid { get; set; }

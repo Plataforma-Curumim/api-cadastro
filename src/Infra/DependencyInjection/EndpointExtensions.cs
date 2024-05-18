@@ -6,7 +6,7 @@ namespace api_cadastro.Infra.DependencyInjection
     {
         public static void UseEndpointExtentions(this WebApplication app)
         {
-            app.AddCadastroUsuario();
+            app.AddRegisterUser();
         }
     }
 }

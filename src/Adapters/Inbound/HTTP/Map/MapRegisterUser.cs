@@ -5,7 +5,7 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Mapping
 {
     public static class MapRegisterUser
     {
-        public static CommandRegisterUser ToCommand(RequestRegisterUser request)
+        public static CommandRegisterUser ToCommand(RegisterUserRequest request)
         {
             return new CommandRegisterUser
             {

@@ -25,11 +25,11 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres
                 {
                     _connection.Open();
                 }
-                return new BaseReturn().Sucesso(_connection);
+                return new BaseReturn().Success(_connection);
             }
             catch (Exception ex)
             {
-                return new BaseReturn().ErroSistema(ex);
+                return new BaseReturn().SystemError(ex);
             }
 
         }
