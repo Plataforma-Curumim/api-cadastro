@@ -1,9 +1,9 @@
-﻿using api_cadastro.Domain.Core.Ports.Outbound.DB;
+﻿using api_cadastro.Application.Ports.Outbound.DB;
 
-namespace api_cadastro.Adapters.Outbound.Database.Postgres
+namespace api_cadastro.Adapters.Outbound.DB.Postgres
 {
     public class PostgresRepository : IDBRepository
     {
-        
+
     }
 }

@@ -1,8 +1,8 @@
-﻿using api_cadastro.Domain.Core.Base;
-using api_cadastro.Domain.Core.Ports.Outbound.DB;
+﻿using api_cadastro.Application.Domain.Base;
+using api_cadastro.Application.Ports.Outbound.DB;
 using Npgsql;
 
-namespace api_cadastro.Adapters.Outbound.Database.Postgres
+namespace api_cadastro.Adapters.Outbound.DB.Postgres
 {
     public class PostgresConnection : IDBConnection
     {
@@ -19,18 +19,20 @@ namespace api_cadastro.Adapters.Outbound.Database.Postgres
 
         public async Task<BaseReturn> GetConnection()
         {
-            try{
+            try
+            {
                 if (!_isConnect)
                 {
                     _connection.Open();
                 }
                 return new BaseReturn().Sucesso(_connection);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new BaseReturn().ErroSistema(ex);
             }
-            
+
         }
-    
+
     }
 }
