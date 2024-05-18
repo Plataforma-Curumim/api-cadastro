@@ -1,5 +1,5 @@
 ﻿using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
-using api_cadastro.Application.Domain.Command;
+using api_cadastro.Application.Domain.Dto.Command;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Mapping
 {

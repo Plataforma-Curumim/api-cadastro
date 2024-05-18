@@ -2,10 +2,10 @@
 
 namespace api_cadastro.Adapters.Inbound.HTTP.DTO.Responses
 {
-    public record RegisterUserResponse
+    public record RegisterBookResponse
     {
-        public string? UserId { get; set; }
+        public string? BookId { get; set; }
         public DateTime DateRegister { get; set; }
-        public User? User{ get; set; }
+        public Book? Book { get; set; }
     }
 }

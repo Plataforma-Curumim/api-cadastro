@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Data;
 
-namespace api_cadastro.Application.Domain.Base
+namespace api_cadastro.Application.Domain.Dto.Base
 {
     public record BaseReturn
     {

@@ -1,8 +1,8 @@
 ﻿using api_cadastro.Adapters.Inbound.HTTP.Mapping;
-using api_cadastro.Application.Domain.Base;
 using api_cadastro.Application.Ports.Inbound.UseCases;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
+using api_cadastro.Application.Domain.Dto.Base;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {

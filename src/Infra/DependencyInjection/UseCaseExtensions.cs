@@ -8,6 +8,7 @@ namespace api_cadastro.Infra.DependencyInjection
         public static void AddUseCaseExtensions(this IServiceCollection services)
         {
             services.AddScoped<IUseCaseRegisterUser, UseCaseRegisterUser>();
+            services.AddScoped<IUseCaseRegisterBook, UseCaseRegisterBook>();
         }
     }
 }
