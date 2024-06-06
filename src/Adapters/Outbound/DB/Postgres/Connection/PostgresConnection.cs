@@ -1,8 +1,7 @@
-﻿using api_cadastro.Application.Domain.Dto.Base;
-using api_cadastro.Application.Ports.Outbound.DB;
+﻿using api_cadastro.Application.Ports.Outbound.DB.Connection;
 using Npgsql;
 
-namespace api_cadastro.Adapters.Outbound.DB.Postgres
+namespace api_cadastro.Adapters.Outbound.DB.Postgres.Connection
 {
     public class PostgresConnection : IDBConnection
     {
@@ -17,7 +16,7 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres
             _connection = new NpgsqlConnection(_connectionString);
         }
 
-        public async Task<BaseReturn> GetConnection()
+        public NpgsqlConnection GetConnection()
         {
             try
             {
@@ -25,11 +24,11 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres
                 {
                     _connection.Open();
                 }
-                return new BaseReturn().Success(_connection);
+                return _connection;
             }
             catch (Exception ex)
             {
-                return new BaseReturn().SystemError(ex);
+                throw new Exception(ex.Message);
             }
 
         }
