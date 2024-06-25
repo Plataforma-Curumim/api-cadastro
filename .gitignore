@@ -1,4 +1,6 @@
 .vs
-src\.vs
-src\bin
-src\obj
+src/.vs
+src/bin
+src/obj
+
+
