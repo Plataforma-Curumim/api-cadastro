@@ -3,7 +3,7 @@
     public record Appsettings
     {
         public DatabaseSettings Database { get; set; }
-        public ApiOpenLibrarySettings ApiOpenLibrary { get; set; }
+        public RestSettings restSettings { get; set; }
 
 
         public Appsettings()

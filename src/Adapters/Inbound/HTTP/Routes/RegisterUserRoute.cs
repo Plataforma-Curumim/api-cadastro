@@ -1,8 +1,8 @@
-﻿using api_cadastro.Adapters.Inbound.HTTP.Mapping;
-using api_cadastro.Application.Ports.Inbound.UseCases;
+﻿using api_cadastro.Application.Ports.Inbound.UseCases;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Application.Domain.Dto.Base;
+using api_cadastro.Adapters.Inbound.HTTP.Mappers;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {
@@ -10,7 +10,7 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
     {
         public static void AddRegisterUser(this WebApplication app)
         {
-            app.MapPost("/cadastrar-usuario", RegisterUser)
+            app.MapPost("/registerUser", RegisterUser)
                 .Accepts<RegisterUserRequest>("application/json")
                 .Produces<RegisterUserResponse>(201)
                 .Produces<BaseError>(400)

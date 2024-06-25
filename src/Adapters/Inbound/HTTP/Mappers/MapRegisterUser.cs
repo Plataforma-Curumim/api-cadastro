@@ -1,7 +1,7 @@
 ﻿using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
 using api_cadastro.Application.Domain.Dto.Command;
 
-namespace api_cadastro.Adapters.Inbound.HTTP.Mapping
+namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
 {
     public static class MapRegisterUser
     {

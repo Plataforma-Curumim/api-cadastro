@@ -10,7 +10,7 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
     {
         public static void AddRegisterBook(this WebApplication app)
         {
-            app.MapPost("/cadastrar-livro", RegisterBook)
+            app.MapPost("/registerBook", RegisterBook)
                 .Accepts<RegisterBookRequest>("application/json")
                 .Produces<RegisterBookResponse>(201)
                 .Produces<BaseError>(400)

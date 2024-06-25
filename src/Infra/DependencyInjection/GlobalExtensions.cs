@@ -6,10 +6,10 @@ namespace api_cadastro.Infra.DependencyInjection
     {
         public static void AddGlobalExtensions(this IServiceCollection services, IConfiguration configuration)
         {
-            ApiOpenLibrarySettings apiOpenLibrarySettings = new ApiOpenLibrarySettings();
-            configuration.GetSection("ApiOpenLibrary").Bind(apiOpenLibrarySettings);
+            RestSettings restSettings = new RestSettings();
+            configuration.GetSection("Rest").Bind(restSettings);
 
-            services.Configure<ApiOpenLibrarySettings>(options => configuration.GetSection("ApiOpenLibrary").Bind(options));
+            services.Configure<RestSettings>(options => configuration.GetSection("Rest").Bind(options));
 
 
             DatabaseSettings databaseSettings = new DatabaseSettings();
@@ -22,6 +22,7 @@ namespace api_cadastro.Infra.DependencyInjection
             services.AddEndpointsApiExplorer();
             services.AddUseCaseExtensions();
             services.AddRepositoryExtension();
+            services.AddRestExtension();
         }
 
         public static void UseGlobalExtensions(this WebApplication app)
