@@ -30,6 +30,7 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
                 NpgsqlCommand cmd = new NpgsqlCommand("sps_registerBook", _connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchUserId", msgIn.UserId!));
                 cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchBookId", msgIn.Book!.BookId!));
                 cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchIsbn", msgIn.Book!.Isbn!));
                 cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchTitle", msgIn.Book!.Title!));
@@ -56,7 +57,6 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
 
                     msgIn.BookId = cmd.Parameters.FirstOrDefault(pvchBookId).Value.ToString() ?? "";
                     msgIn.DateOfRegister = cmd.Parameters.FirstOrDefault(pdatDateOfRegister).Value.ToString() ?? "";
-
                     return msgIn;
                 }
                 catch (Exception ex)

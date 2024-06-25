@@ -2,6 +2,7 @@
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Adapters.Inbound.HTTP.Mappers;
 using api_cadastro.Application.Domain.Dto.Base;
+using api_cadastro.Application.Domain.Enums;
 using api_cadastro.Application.Ports.Inbound.UseCases;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,11 +31,14 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
             {
                 var response = await useCase.Execute(MapRegisterBook.ToCommand(request));
 
-                return Results.Json(response, statusCode: 200);
+                if (response.State != EnumState.SUCCESS) return MapErrorEndpoint.ToEndpointError(response.ErrorObject);
+
+                var responseMap = MapRegisterBook.ToResponse(response.SucessObject!);
+                return Results.Ok(response);
             }
             catch (Exception ex)
             {
-                return new BaseReturn().SystemError(ex).GetResponse();
+                return Results.BadRequest(ex);
             }
         }
     }

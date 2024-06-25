@@ -11,6 +11,16 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
             return new CommandRegisterBook
             {
                 Book = request.Book,
+                UserId = request.UserId,
+            };
+        }
+
+        public static RegisterBookResponse ToResponse(CommandRegisterBook response)
+        {
+            return new RegisterBookResponse
+            {
+                BookId = response.BookId,
+                DateRegister = response.DateRegister
             };
         }
     }

@@ -27,12 +27,12 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
         {
             try
             {
-                var response = await useCase.Execute(MapRegisterUser.ToCommand(request));
-                return Results.Json(response, statusCode: 200);
+                //var response = await useCase.Execute(MapRegisterUser.ToCommand(request));
+                return Results.Ok();
             }
             catch (Exception ex)
             {
-                return new BaseReturn().SystemError(ex).GetResponse();
+                return Results.Ok();
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using api_cadastro.Application.Domain.Settings;
 using api_cadastro.Application.Ports.Outbound.DB.Connection;
 using Npgsql;
-using System.Diagnostics.Metrics;
 
 namespace api_cadastro.Adapters.Outbound.DB.Postgres.Connection
 {

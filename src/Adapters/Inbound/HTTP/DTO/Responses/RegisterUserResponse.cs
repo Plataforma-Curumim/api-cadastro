@@ -1,4 +1,4 @@
-﻿using api_cadastro.Application.Domain.ValueObjects;
+﻿using api_cadastro.Application.Domain.Entities;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.DTO.Responses
 {

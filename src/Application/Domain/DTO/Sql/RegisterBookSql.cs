@@ -6,6 +6,7 @@ namespace api_cadastro.Application.Domain.DTO.Sql
     {
         public string BookId { get; set; }
         public string DateOfRegister { get; set; }
+        public string UserId { get; set; }
         public Book Book { get; set; }
     }
 }
