@@ -11,7 +11,7 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
             return new CommandRegisterBook
             {
                 Book = request.Book,
-                UserId = request.UserId,
+                config = request.Config,
             };
         }
 

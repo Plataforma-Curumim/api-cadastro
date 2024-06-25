@@ -26,7 +26,7 @@ namespace api_cadastro.Application.Core.UseCases
                 {
                     var error = new BaseError
                     {
-                        code = "500",
+                        code = "400",
                         message = "Erro ao cadastrar livro.",
                     };
 

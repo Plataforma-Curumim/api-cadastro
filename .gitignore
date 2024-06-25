@@ -1,5 +1,4 @@
 .vs
-\src\.vs
-\src\bin
-\src\obj
-/TextFile1.txt
+src\.vs
+src\bin
+src\obj

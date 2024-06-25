@@ -8,5 +8,6 @@ namespace api_cadastro.Application.Domain.DTO.Command
         public string UserId { get; set; }
         public string? BookId { get; set; }
         public DateTime DateRegister { get; set; }
+        public ConfigLibrary config { get; set; }
     }
 }

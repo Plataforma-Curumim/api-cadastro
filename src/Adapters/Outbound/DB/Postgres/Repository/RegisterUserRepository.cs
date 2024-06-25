@@ -3,6 +3,7 @@ using api_cadastro.Application.Ports.Outbound.DB.Connection;
 using api_cadastro.Application.Ports.Outbound.DB.Repository;
 using Npgsql;
 using NpgsqlTypes;
+using System.Data;
 
 namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
 {
@@ -23,35 +24,33 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
                 NpgsqlCommand cmd = new NpgsqlCommand("sps_registerUser", _connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("pvchUserId", NpgsqlDbType.Varchar, msgIn.User!.UserId!);
-                cmd.Parameters.AddWithValue("pvchName", NpgsqlDbType.Varchar, msgIn.User!.Name!);
-                cmd.Parameters.AddWithValue("pvchCpfCnpj", NpgsqlDbType.Varchar, msgIn.User!.CpfCnpj!);
-                cmd.Parameters.AddWithValue("pvchEmail", NpgsqlDbType.Varchar, msgIn.User!.Email!);
-                cmd.Parameters.AddWithValue("pvchUsername", NpgsqlDbType.Varchar, msgIn.User!.Username!);
-                cmd.Parameters.AddWithValue("pvchPassword", NpgsqlDbType.Varchar, msgIn.User!.Password!);
-                cmd.Parameters.AddWithValue("pdatDateOfBirth", NpgsqlDbType.Date, msgIn.User!.DateOfBirth!);
-                cmd.Parameters.AddWithValue("pvchNumberPhone", NpgsqlDbType.Varchar, msgIn.User!.NumberPhone!);
-                cmd.Parameters.AddWithValue("pvchAddress", NpgsqlDbType.Varchar, msgIn.User!.Address!);
-                cmd.Parameters.AddWithValue("pvchIdRfid", NpgsqlDbType.Varchar, msgIn.User!.IdRfid!);
-                cmd.Parameters.AddWithValue("psmlStateUser", NpgsqlDbType.Smallint, msgIn.User!.StateUser!);
-                cmd.Parameters.AddWithValue("psmlTypeUser", NpgsqlDbType.Smallint, msgIn.User!.TypeUser!);
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchName", msgIn.User!.Name!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchCpfCnpj", msgIn.User!.CpfCnpj!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchEmail", msgIn.User!.Email!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchUsername", msgIn.User!.Username!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchPassword", msgIn.User!.Password!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pdatDateOfBirth", msgIn.User!.DateOfBirth!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchNumberPhone", msgIn.User!.NumberPhone!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchAddress", msgIn.User!.Address!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchIdRfid", msgIn.User!.IdRfid!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("psmlStateUser", msgIn.User!.StateUser!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("psmlTypeUser", msgIn.User!.TypeUser!));
 
-                try
-                {
-                    var response = cmd.ExecuteReader();
-                    transaction.Commit();
+                NpgsqlParameter pvchUserId = new NpgsqlParameter("pvchUserId", NpgsqlDbType.Varchar, 1000, "", ParameterDirection.Output, false, new byte(), new byte(), new DataRowVersion(), msgIn.UserId!);
+                NpgsqlParameter pdatDateOfRegister = new NpgsqlParameter("pdatDateOfRegister", NpgsqlDbType.Date, 1000, "", ParameterDirection.Output, false, new byte(), new byte(), new DataRowVersion(), msgIn.DateOfRegister!);
 
-                    //get value dos parametros
+                cmd.Parameters.AddWithValue(pvchUserId);
+                cmd.Parameters.AddWithValue(pdatDateOfRegister);
+                cmd.Prepare();
 
-                    return msgIn;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    transaction.Commit();
+                var response = cmd.ExecuteReader();
+                transaction.Commit();
 
-                    throw new Exception(ex.Message);
-                }
+                msgIn.UserId = cmd.Parameters.FirstOrDefault(pvchUserId).Value.ToString() ?? "";
+                msgIn.DateOfRegister = cmd.Parameters.FirstOrDefault(pdatDateOfRegister).Value.ToString() ?? "";
+
+                return msgIn;
+                
             }
         }
     }

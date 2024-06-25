@@ -1,14 +1,9 @@
-﻿using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
-using api_cadastro.Application.Domain.Dto.Base;
-using api_cadastro.Application.Domain.DTO.Command;
-using api_cadastro.Application.Domain.DTO.Sql;
+﻿using api_cadastro.Application.Domain.DTO.Sql;
 using api_cadastro.Application.Ports.Outbound.DB.Connection;
 using api_cadastro.Application.Ports.Outbound.DB.Repository;
-using Microsoft.OpenApi.Models;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
-using System.Linq;
 
 namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
 {
@@ -50,22 +45,12 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
                 cmd.Parameters.AddWithValue(pdatDateOfRegister);
                 cmd.Prepare(); 
 
-                try
-                {
-                    var response = cmd.ExecuteReader();
-                    transaction.Commit();
+                var response = cmd.ExecuteReader();
+                transaction.Commit();
 
-                    msgIn.BookId = cmd.Parameters.FirstOrDefault(pvchBookId).Value.ToString() ?? "";
-                    msgIn.DateOfRegister = cmd.Parameters.FirstOrDefault(pdatDateOfRegister).Value.ToString() ?? "";
-                    return msgIn;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    transaction.Commit();
-
-                    throw new Exception(ex.Message);
-                }
+                msgIn.BookId = cmd.Parameters.FirstOrDefault(pvchBookId).Value.ToString() ?? "";
+                msgIn.DateOfRegister = cmd.Parameters.FirstOrDefault(pdatDateOfRegister).Value.ToString() ?? "";
+                return msgIn;
             }
         }
     }

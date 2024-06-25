@@ -16,8 +16,6 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
                 .Accepts<RegisterBookRequest>("application/json")
                 .Produces<RegisterBookResponse>(201)
                 .Produces<BaseError>(400)
-                .Produces<BaseError>(401)
-                .Produces<BaseError>(404)
                 .Produces<BaseError>(422)
                 .Produces<BaseError>(500);
 

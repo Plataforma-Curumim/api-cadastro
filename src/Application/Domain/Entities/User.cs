@@ -5,7 +5,6 @@ namespace api_cadastro.Application.Domain.Entities
 {
     public record User
     {
-        public string? UserId { get; set; }
         [Required(ErrorMessage = "Nome do usuário é obrigatório")]
         public string? Name { get; set; }
         [Required(ErrorMessage = "Cpf/Cnpj do usuário obrigatório")]

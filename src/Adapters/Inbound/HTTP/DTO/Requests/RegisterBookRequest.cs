@@ -7,6 +7,6 @@ namespace api_cadastro.Adapters.Inbound.HTTP.DTO.Requests
     {
         [Required(ErrorMessage = "As informações do livro são obrigatórias")]
         public Book? Book { get; set; }
-        public string UserId { get; set; }
+        public ConfigLibrary Config { get; set; }
     }
 }
