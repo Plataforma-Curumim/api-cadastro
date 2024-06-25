@@ -6,12 +6,6 @@ namespace api_cadastro.Infra.DependencyInjection
     {
         public static void AddGlobalExtensions(this IServiceCollection services, IConfiguration configuration)
         {
-            RestSettings restSettings = new RestSettings();
-            configuration.GetSection("Rest").Bind(restSettings);
-
-            services.Configure<RestSettings>(options => configuration.GetSection("Rest").Bind(options));
-
-
             DatabaseSettings databaseSettings = new DatabaseSettings();
             configuration.GetSection("Database").Bind(databaseSettings);
 
@@ -22,7 +16,6 @@ namespace api_cadastro.Infra.DependencyInjection
             services.AddEndpointsApiExplorer();
             services.AddUseCaseExtensions();
             services.AddRepositoryExtension();
-            services.AddRestExtension();
         }
 
         public static void UseGlobalExtensions(this WebApplication app)

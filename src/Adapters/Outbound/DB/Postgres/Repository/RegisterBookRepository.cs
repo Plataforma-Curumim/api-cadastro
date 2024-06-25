@@ -1,9 +1,14 @@
-﻿using api_cadastro.Application.Domain.Dto.Base;
+﻿using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
+using api_cadastro.Application.Domain.Dto.Base;
 using api_cadastro.Application.Domain.DTO.Command;
+using api_cadastro.Application.Domain.DTO.Sql;
 using api_cadastro.Application.Ports.Outbound.DB.Connection;
 using api_cadastro.Application.Ports.Outbound.DB.Repository;
+using Microsoft.OpenApi.Models;
 using Npgsql;
 using NpgsqlTypes;
+using System.Data;
+using System.Linq;
 
 namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
 {
@@ -18,35 +23,48 @@ namespace api_cadastro.Adapters.Outbound.DB.Postgres.Repository
             _connection = _dbConnection.GetConnection();
         }
 
-        public async Task<BaseReturn> RegisterBook(CommandRegisterBook command)
+        public async Task<RegisterBookSql> RegisterBook(RegisterBookSql msgIn)
         {
             using (NpgsqlTransaction transaction = _connection.BeginTransaction())
             {
                 NpgsqlCommand cmd = new NpgsqlCommand("sps_registerBook", _connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("pvchBookId", NpgsqlDbType.Varchar, command.Book!.BookId!);
-                cmd.Parameters.AddWithValue("pvchIsbn", NpgsqlDbType.Varchar, command.Book!.Isbn!);
-                cmd.Parameters.AddWithValue("pvchTitle", NpgsqlDbType.Varchar, command.Book!.Title!);
-                cmd.Parameters.AddWithValue("pvchAuthor", NpgsqlDbType.Varchar, command.Book!.Author!);
-                cmd.Parameters.AddWithValue("pvchPublishingCompany", NpgsqlDbType.Varchar, command.Book!.PublishingCompany!);
-                cmd.Parameters.AddWithValue("psmlYearOfPublication", NpgsqlDbType.Smallint, command.Book!.YearOfPublication!);
-                cmd.Parameters.AddWithValue("pvchSinopse", NpgsqlDbType.Varchar, command.Book!.Sinopse!);
-                cmd.Parameters.AddWithValue("pvchGender", NpgsqlDbType.Varchar, command.Book!.Gender!);
-                cmd.Parameters.AddWithValue("pvchLanguage", NpgsqlDbType.Varchar, command.Book!.Language!);
-                cmd.Parameters.AddWithValue("pvchUrlImage", NpgsqlDbType.Varchar, command.Book!.UrlImage!);
-                cmd.Parameters.AddWithValue("pvchRfidId", NpgsqlDbType.Varchar, command.Book!.RfidId!);
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchBookId", msgIn.Book!.BookId!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchIsbn", msgIn.Book!.Isbn!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchTitle", msgIn.Book!.Title!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchAuthor", msgIn.Book!.Author!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchPublishers", msgIn.Book!.Publishers!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("psmlPublishDate", msgIn.Book!.PublishDate!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchSinopse", msgIn.Book!.Sinopse!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchGender", msgIn.Book!.Gender!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchLanguage", msgIn.Book!.Language!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchUrlImage", msgIn.Book!.UrlImage!));
+                cmd.Parameters.AddWithValue(new NpgsqlParameter("pvchRfidId", msgIn.Book!.RfidId!));
+
+                NpgsqlParameter pvchBookId = new NpgsqlParameter("pvchBookId", NpgsqlDbType.Varchar, 1000, "", ParameterDirection.Output, false, new byte(), new byte(), new DataRowVersion(), msgIn.Book!.BookId!);
+                NpgsqlParameter pdatDateOfRegister = new NpgsqlParameter("pdatDateOfRegister", NpgsqlDbType.Date, 1000, "", ParameterDirection.Output, false, new byte(), new byte(), new DataRowVersion(), msgIn.DateOfRegister!);
+
+                cmd.Parameters.AddWithValue(pvchBookId);
+                cmd.Parameters.AddWithValue(pdatDateOfRegister);
+                cmd.Prepare(); 
+
                 try
                 {
                     var response = cmd.ExecuteReader();
                     transaction.Commit();
-                    return new BaseReturn().Success(response);
+
+                    msgIn.BookId = cmd.Parameters.FirstOrDefault(pvchBookId).Value.ToString() ?? "";
+                    msgIn.DateOfRegister = cmd.Parameters.FirstOrDefault(pdatDateOfRegister).Value.ToString() ?? "";
+
+                    return msgIn;
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
                     transaction.Commit();
-                    return new BaseReturn().BusinessError(ex.Message);
+
+                    throw new Exception(ex.Message);
                 }
             }
         }

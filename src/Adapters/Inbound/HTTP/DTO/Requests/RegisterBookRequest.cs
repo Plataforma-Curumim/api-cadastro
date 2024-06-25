@@ -1,5 +1,4 @@
-﻿using api_cadastro.Application.Domain.Enums;
-using api_cadastro.Application.Domain.ValueObjects;
+﻿using api_cadastro.Application.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.DTO.Requests

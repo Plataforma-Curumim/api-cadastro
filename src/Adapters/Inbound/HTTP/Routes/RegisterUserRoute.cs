@@ -3,6 +3,8 @@ using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Application.Domain.Dto.Base;
 using api_cadastro.Adapters.Inbound.HTTP.Mappers;
+using Microsoft.AspNetCore.Http;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {
@@ -26,7 +28,7 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
             try
             {
                 var response = await useCase.Execute(MapRegisterUser.ToCommand(request));
-                return response.GetResponse();
+                return Results.Json(response, statusCode: 200);
             }
             catch (Exception ex)
             {

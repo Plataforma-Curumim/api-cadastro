@@ -3,6 +3,7 @@ using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Adapters.Inbound.HTTP.Mappers;
 using api_cadastro.Application.Domain.Dto.Base;
 using api_cadastro.Application.Ports.Inbound.UseCases;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {
@@ -21,12 +22,15 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 
 
         }
-        private static async Task<IResult> RegisterBook(IUseCaseRegisterBook useCase, HttpContext context, RegisterBookRequest request)
+        private static async Task<IResult> RegisterBook([FromServices]IUseCaseRegisterBook useCase,
+                                                        [FromBody]RegisterBookRequest request,
+                                                        HttpContext context)
         {
             try
             {
                 var response = await useCase.Execute(MapRegisterBook.ToCommand(request));
-                return response.GetResponse();
+
+                return Results.Json(response, statusCode: 200);
             }
             catch (Exception ex)
             {

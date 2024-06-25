@@ -1,4 +1,4 @@
-﻿namespace api_cadastro.Application.Domain.ValueObjects
+﻿namespace api_cadastro.Application.Domain.Entities
 {
     public record ConfigUserLibrary
     {

@@ -1,7 +1,7 @@
 ﻿using api_cadastro.Application.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace api_cadastro.Application.Domain.ValueObjects
+namespace api_cadastro.Application.Domain.Entities
 {
     public record User
     {
