@@ -1,79 +1,32 @@
-﻿using System.Net;
-using System.Data;
+﻿using api_cadastro.Application.Domain.Dto.Base;
+using api_cadastro.Application.Domain.Enums;
 
-namespace api_cadastro.Application.Domain.Dto.Base
+public struct BaseReturn<TSuccess>
 {
-    public record BaseReturn
+    public EnumState State { get; set; }
+    public TSuccess? SucessObject { get; set; }
+    public BaseError? ErrorObject { get; set; }
+
+    public BaseReturn()
     {
-        public object? Body;
-        public BaseError? Error;
-        public HttpStatusCode StatusCode = HttpStatusCode.OK;
+        State = EnumState.SUCCESS;
+        SucessObject = default;
+        ErrorObject = null;
+    }
 
+    public BaseReturn<TSuccess> Success(TSuccess success)
+    {
+        State = EnumState.SUCCESS;
+        SucessObject = success;
 
+        return this;
+    }
 
-        public BaseReturn()
-        {
+    public BaseReturn<TSuccess> Error(EnumState status, BaseError error)
+    {
+        State = status;
+        ErrorObject = error;
 
-        }
-
-        public void HttpSuccess<TBody>(TBody successObject)
-        {
-            Body = successObject;
-        }
-
-
-        public BaseReturn Success(object successObject)
-        {
-            Body = successObject;
-
-            return this;
-        }
-
-
-        public BaseReturn BusinessError(string message)
-        {
-            StatusCode = HttpStatusCode.BadRequest;
-
-            Error = new()
-            {
-                code = "400",
-                message = $"{message}",
-            };
-
-            return this;
-        }
-
-
-
-
-        public BaseReturn SystemError(Exception ex)
-        {
-            StatusCode = HttpStatusCode.InternalServerError;
-
-            Error = new()
-            {
-                code = "500",
-                message = $"System Error: {ex.Message}",
-                info = ex.StackTrace,
-            };
-
-            return this;
-        }
-
-        public object? GetBody()
-        {
-            if (StatusCode is HttpStatusCode.OK) return Body;
-            return Error;
-        }
-
-        public IResult GetResponse()
-        {
-            if (StatusCode is HttpStatusCode.OK) return Results.Ok(Body);
-            return Results.Json(Error, statusCode: (int)StatusCode);
-        }
-
-
-
-
+        return this;
     }
 }

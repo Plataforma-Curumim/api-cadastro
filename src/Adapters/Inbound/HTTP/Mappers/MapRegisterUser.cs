@@ -1,7 +1,9 @@
 ﻿using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
+using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Application.Domain.Dto.Command;
+using api_cadastro.Application.Domain.DTO.Command;
 
-namespace api_cadastro.Adapters.Inbound.HTTP.Mapping
+namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
 {
     public static class MapRegisterUser
     {
@@ -10,7 +12,15 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Mapping
             return new CommandRegisterUser
             {
                 User = request.User,
-                ConfigUserLibrary = request.ConfigUserLibrary,
+                Config = request.Config
+            };
+        }
+        public static RegisterUserResponse ToResponse(CommandRegisterUser response)
+        {
+            return new RegisterUserResponse
+            {
+                DateRegister = response.DateRegister,
+                UserId = response.UserId,
             };
         }
     }

@@ -1,8 +1,9 @@
-﻿using api_cadastro.Adapters.Inbound.HTTP.Mapping;
-using api_cadastro.Application.Ports.Inbound.UseCases;
+﻿using api_cadastro.Application.Ports.Inbound.UseCases;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
 using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Application.Domain.Dto.Base;
+using api_cadastro.Adapters.Inbound.HTTP.Mappers;
+using api_cadastro.Application.Domain.Enums;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {
@@ -10,12 +11,10 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
     {
         public static void AddRegisterUser(this WebApplication app)
         {
-            app.MapPost("/cadastrar-usuario", RegisterUser)
+            app.MapPost("/registerUser", RegisterUser)
                 .Accepts<RegisterUserRequest>("application/json")
                 .Produces<RegisterUserResponse>(201)
                 .Produces<BaseError>(400)
-                .Produces<BaseError>(401)
-                .Produces<BaseError>(404)
                 .Produces<BaseError>(422)
                 .Produces<BaseError>(500);
 
@@ -25,12 +24,17 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
         {
             try
             {
+
                 var response = await useCase.Execute(MapRegisterUser.ToCommand(request));
-                return response.GetResponse();
+
+                if (response.State != EnumState.SUCCESS) return MapErrorEndpoint.ToEndpointError(response.ErrorObject);
+
+                var responseMap = MapRegisterUser.ToResponse(response.SucessObject!);
+                return Results.Ok();
             }
             catch (Exception ex)
             {
-                return new BaseReturn().SystemError(ex).GetResponse();
+                return Results.BadRequest(ex);
             }
         }
     }

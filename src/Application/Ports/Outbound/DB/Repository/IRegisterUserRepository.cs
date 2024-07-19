@@ -1,10 +1,9 @@
-﻿using api_cadastro.Application.Domain.Dto.Base;
-using api_cadastro.Application.Domain.Dto.Command;
+﻿using api_cadastro.Application.Domain.DTO.Sql;
 
 namespace api_cadastro.Application.Ports.Outbound.DB.Repository
 {
     public interface IRegisterUserRepository
     {
-        public Task<BaseReturn> RegisterUser(CommandRegisterUser command);
+        public Task<RegisterUserSql> RegisterUser(RegisterUserSql command);
     }
 }

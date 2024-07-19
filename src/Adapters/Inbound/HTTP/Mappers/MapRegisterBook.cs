@@ -1,4 +1,5 @@
 ﻿using api_cadastro.Adapters.Inbound.HTTP.DTO.Requests;
+using api_cadastro.Adapters.Inbound.HTTP.DTO.Responses;
 using api_cadastro.Application.Domain.DTO.Command;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
@@ -10,6 +11,16 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
             return new CommandRegisterBook
             {
                 Book = request.Book,
+                config = request.Config,
+            };
+        }
+
+        public static RegisterBookResponse ToResponse(CommandRegisterBook response)
+        {
+            return new RegisterBookResponse
+            {
+                BookId = response.BookId,
+                DateRegister = response.DateRegister
             };
         }
     }
