@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.DTO.Requests
 {
-    public record RegisterUserRequest
+    public record RequestRegisterBook
     {
-        [Required(ErrorMessage = "As informações do usuario são obrigatórias")]
-        public User? User { get; set; }
+        [Required(ErrorMessage = "As informações do livro são obrigatórias")]
+        public Book? Book { get; set; }
         public ConfigLibrary Config { get; set; }
-
     }
 }

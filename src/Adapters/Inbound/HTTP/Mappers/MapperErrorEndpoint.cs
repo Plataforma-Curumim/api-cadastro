@@ -2,7 +2,7 @@
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Mappers
 {
-    public static class MapErrorEndpoint
+    public static class MapperErrorEndpoint
     {
         public static IResult ToEndpointError(BaseError? error)
         {

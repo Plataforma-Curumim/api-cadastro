@@ -1,5 +1,5 @@
 ﻿using api_cadastro.Application.Domain.Dto.Base;
-using api_cadastro.Application.Domain.DTO.Command;
+using api_cadastro.Application.Domain.DTO;
 using api_cadastro.Application.Domain.Enums;
 using api_cadastro.Application.Domain.Mappers;
 using api_cadastro.Application.Ports.Inbound.UseCases;
@@ -15,14 +15,14 @@ namespace api_cadastro.Application.Core.UseCases
             _repository = provider.GetService<IRegisterBookRepository>();
         }
 
-        public async Task<BaseReturn<CommandRegisterBook>> Execute(CommandRegisterBook command)
+        public async Task<BaseReturn<DomainModel>> Execute(DomainModel domainModel)
         {
             try
             {
-                var repositoryModel = MapBookRepository.ToRepository(command);
+                var repositoryModel = MapperRepository.ToRepository(domainModel);
                 var responseRepository = await _repository!.RegisterBook(repositoryModel);
 
-                if (responseRepository.BookId == "")
+                if (responseRepository.tinStatus > 0)
                 {
                     var error = new BaseError
                     {
@@ -30,17 +30,18 @@ namespace api_cadastro.Application.Core.UseCases
                         message = "Erro ao cadastrar livro.",
                     };
 
-                    return new BaseReturn<CommandRegisterBook>().Error(EnumState.BUSINESS, error);
+                    return new BaseReturn<DomainModel>().Error(EnumState.BUSINESS, error);
 
                 }
 
-                var response = MapBookRepository.ToCommand(responseRepository);
-                return new BaseReturn<CommandRegisterBook>().Success(response);
+                var response = MapperRepository.ToDomainModel(domainModel, responseRepository);
+
+                return new BaseReturn<DomainModel>().Success(response);
 
             } catch (Exception ex)
             {
                 var error = new BaseError("500", ex.Message);
-                return new BaseReturn<CommandRegisterBook>().Error(EnumState.SYSTEM, error);
+                return new BaseReturn<DomainModel>().Error(EnumState.SYSTEM, error);
 
             }
 

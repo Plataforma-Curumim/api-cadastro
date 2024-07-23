@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {
-    public static class RegisterBookRoute
+    public static class EndpointRegisterBook
     {
         public static void AddRegisterBook(this WebApplication app)
         {
             app.MapPost("/registerBook", RegisterBook)
-                .Accepts<RegisterBookRequest>("application/json")
+                .WithTags("Cadastrar Livro")
+                .Accepts<RequestRegisterBook>("application/json")
                 .Produces<RegisterBookResponse>(201)
                 .Produces<BaseError>(400)
                 .Produces<BaseError>(422)
@@ -22,16 +23,17 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 
         }
         private static async Task<IResult> RegisterBook([FromServices]IUseCaseRegisterBook useCase,
-                                                        [FromBody]RegisterBookRequest request,
+                                                        [FromBody]RequestRegisterBook request,
                                                         HttpContext context)
         {
             try
             {
-                var response = await useCase.Execute(MapRegisterBook.ToCommand(request));
+                var mapper = MapperRegisterBook.ToDomain(request);
+                var response = await useCase.Execute(mapper);
 
-                if (response.State != EnumState.SUCCESS) return MapErrorEndpoint.ToEndpointError(response.ErrorObject);
+                if (response.State != EnumState.SUCCESS) return MapperErrorEndpoint.ToEndpointError(response.ErrorObject);
 
-                var responseMap = MapRegisterBook.ToResponse(response.SucessObject!);
+                var responseMap = MapperRegisterBook.ToResponse(response.SucessObject!);
                 return Results.Ok(response);
             }
             catch (Exception ex)

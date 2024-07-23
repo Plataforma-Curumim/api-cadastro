@@ -7,12 +7,13 @@ using api_cadastro.Application.Domain.Enums;
 
 namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 {
-    public static class RegisterUserRoute
+    public static class EndpointRegisterUser
     {
         public static void AddRegisterUser(this WebApplication app)
         {
             app.MapPost("/registerUser", RegisterUser)
-                .Accepts<RegisterUserRequest>("application/json")
+                .WithTags("Cadastro de Usuário")
+                .Accepts<RequestRegisterUser>("application/json")
                 .Produces<RegisterUserResponse>(201)
                 .Produces<BaseError>(400)
                 .Produces<BaseError>(422)
@@ -20,17 +21,17 @@ namespace api_cadastro.Adapters.Inbound.HTTP.Routes
 
 
         }
-        private static async Task<IResult> RegisterUser(IUseCaseRegisterUser useCase, HttpContext context, RegisterUserRequest request)
+        private static async Task<IResult> RegisterUser(IUseCaseRegisterUser useCase, HttpContext context, RequestRegisterUser request)
         {
             try
             {
+                var mapper = MapperRegisterUser.ToDomain(request);
+                var response = await useCase.Execute(mapper);
 
-                var response = await useCase.Execute(MapRegisterUser.ToCommand(request));
+                if (response.State != EnumState.SUCCESS) return MapperErrorEndpoint.ToEndpointError(response.ErrorObject);
 
-                if (response.State != EnumState.SUCCESS) return MapErrorEndpoint.ToEndpointError(response.ErrorObject);
-
-                var responseMap = MapRegisterUser.ToResponse(response.SucessObject!);
-                return Results.Ok();
+                var responseMap = MapperRegisterUser.ToResponse(response.SucessObject!);
+                return Results.Ok(responseMap);
             }
             catch (Exception ex)
             {

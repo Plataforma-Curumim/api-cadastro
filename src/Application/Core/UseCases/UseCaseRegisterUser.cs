@@ -1,5 +1,6 @@
 ﻿using api_cadastro.Application.Domain.Dto.Base;
 using api_cadastro.Application.Domain.Dto.Command;
+using api_cadastro.Application.Domain.DTO;
 using api_cadastro.Application.Domain.DTO.Command;
 using api_cadastro.Application.Domain.Enums;
 using api_cadastro.Application.Domain.Mappers;
@@ -16,14 +17,14 @@ namespace api_cadastro.Application.Core.UseCases
         {
             _repository = provider.GetService<IRegisterUserRepository>();
         }
-        public async Task<BaseReturn<CommandRegisterUser>> Execute(CommandRegisterUser command)
+        public async Task<BaseReturn<DomainModel>> Execute(DomainModel domainModel)
         {
             try
             {
-                var repositoryModel = MapUserRepository.ToRepository(command);
+                var repositoryModel = MapperRepository.ToRepository(domainModel);
                 var responseRepository = await _repository!.RegisterUser(repositoryModel);
 
-                if (responseRepository.UserId == "")
+                if (responseRepository.tinStatus > 0)
                 {
                     var error = new BaseError
                     {
@@ -31,17 +32,17 @@ namespace api_cadastro.Application.Core.UseCases
                         message = "Erro ao cadastrar usuario.",
                     };
 
-                    return new BaseReturn<CommandRegisterUser>().Error(EnumState.BUSINESS, error);
+                    return new BaseReturn<DomainModel>().Error(EnumState.BUSINESS, error);
                 }
 
-                var response = MapUserRepository.ToCommand(responseRepository);
+                var response = MapperRepository.ToDomainModel(domainModel, responseRepository);
 
-                return new BaseReturn<CommandRegisterUser>().Success(response);
+                return new BaseReturn<DomainModel>().Success(response);
 
             }catch (Exception ex)
             {
                 var error = new BaseError("500", ex.Message);
-                return new BaseReturn<CommandRegisterUser>().Error(EnumState.SYSTEM, error);
+                return new BaseReturn<DomainModel>().Error(EnumState.SYSTEM, error);
             }
         }
     }

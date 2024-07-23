@@ -4,6 +4,6 @@ namespace api_cadastro.Application.Ports.Outbound.DB.Repository
 {
     public interface IRegisterUserRepository
     {
-        public Task<RegisterUserSql> RegisterUser(RegisterUserSql command);
+        public Task<DtoSql> RegisterUser(DtoSql dto);
     }
 }

@@ -4,6 +4,6 @@ namespace api_cadastro.Application.Ports.Outbound.DB.Repository
 {
     public interface IRegisterBookRepository
     {
-        public Task<RegisterBookSql> RegisterBook(RegisterBookSql msgIn);
+        public Task<DtoSql> RegisterBook(DtoSql dto);
     }
 }
